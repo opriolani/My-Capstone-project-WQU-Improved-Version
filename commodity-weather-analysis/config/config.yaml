@@ -1,0 +1,163 @@
+# ============================================================
+# Commodity Weather Analysis — Configuration
+# ============================================================
+
+project:
+  name: "Commodity Price & Weather Impact Analysis"
+  version: "2.0.0"
+  start_date: "1973-01-01"
+  end_date: "2024-12-31"
+
+# ── Commodity Pairs ──────────────────────────────────────────
+commodity_pairs:
+  - name: "Corn/Oats"
+    base: "CORN"
+    quote: "OATS"
+    category: "grain"
+  - name: "Wheat/Soybean"
+    base: "WHEAT"
+    quote: "SOYBEAN"
+    category: "grain"
+  - name: "Coffee/Cocoa"
+    base: "COFFEE"
+    quote: "COCOA"
+    category: "soft"
+  - name: "Gold/Silver"
+    base: "GOLD"
+    quote: "SILVER"
+    category: "metal"
+
+# ── Weather Stations (Multi-Region Composite) ────────────────
+weather_stations:
+  CORN:
+    stations:
+      - id: "USW00094910"
+        name: "Iowa City, USA"
+        weight: 0.35
+      - id: "BR00E3-0520"
+        name: "Parana, Brazil"
+        weight: 0.35
+      - id: "CHM00050557"
+        name: "Harbin, China"
+        weight: 0.30
+  OATS:
+    stations:
+      - id: "CA005021695"
+        name: "Marquette, Manitoba, Canada"
+        weight: 0.40
+      - id: "POC00135348"
+        name: "Poznan, Poland"
+        weight: 0.35
+      - id: "RSM00028637"
+        name: "Omsk, Russia"
+        weight: 0.25
+  WHEAT:
+    stations:
+      - id: "RSM00027612"
+        name: "Krasnodar, Russia"
+        weight: 0.38
+      - id: "FRM00007149"
+        name: "Clermont-Ferrand, France"
+        weight: 0.32
+      - id: "IN022021900"
+        name: "Amritsar, India"
+        weight: 0.30
+  SOYBEAN:
+    stations:
+      - id: "BRM00083378"
+        name: "Cuiaba, Brazil"
+        weight: 0.40
+      - id: "USW00014834"
+        name: "Springfield, Illinois, USA"
+        weight: 0.35
+      - id: "ARM00087582"
+        name: "Buenos Aires, Argentina"
+        weight: 0.25
+  COFFEE:
+    stations:
+      - id: "BR00E3-0520"
+        name: "Sao Paulo, Brazil"
+        weight: 0.45
+      - id: "VMM00048866"
+        name: "Buon Ma Thuot, Vietnam"
+        weight: 0.30
+      - id: "COM00080222"
+        name: "Bogota, Colombia"
+        weight: 0.25
+  COCOA:
+    stations:
+      - id: "IVM00065578"
+        name: "Abidjan, Cote dIvoire"
+        weight: 0.45
+      - id: "GHM00065418"
+        name: "Kumasi, Ghana"
+        weight: 0.35
+      - id: "IDM00096749"
+        name: "Makassar, Indonesia"
+        weight: 0.20
+  GOLD:
+    stations:
+      - id: "ASN00012038"
+        name: "Kalgoorlie, Australia"
+        weight: 1.00
+  SILVER:
+    stations:
+      - id: "MXM00076525"
+        name: "Zacatecas, Mexico"
+        weight: 1.00
+
+# ── SARIMAX Parameters ───────────────────────────────────────
+sarimax:
+  max_p: 3
+  max_d: 2
+  max_q: 3
+  max_P: 2
+  max_D: 1
+  max_Q: 2
+  m: 12                    # Seasonality period (monthly)
+  information_criterion: "aic"
+  stepwise: true
+  n_fits: 50
+  cv_folds: 5              # Rolling-window cross-validation folds
+
+# ── VECM Parameters ──────────────────────────────────────────
+vecm:
+  max_lags: 12
+  deterministic: "ci"      # Cointegration with intercept
+  seasons: 4
+
+# ── GARCH Parameters ─────────────────────────────────────────
+garch:
+  mean_model: "AR"
+  vol_model: "GARCH"
+  p: 1
+  q: 1
+  dist: "skewt"            # Skewed student-t distribution
+  egarch: true             # Also fit EGARCH for asymmetry
+
+# ── Machine Learning ─────────────────────────────────────────
+ml:
+  test_size: 0.2
+  forecast_horizon: 12     # Months
+  random_state: 42
+  lstm:
+    lookback: 60           # Days
+    units: 64
+    dropout: 0.2
+    epochs: 100
+    batch_size: 32
+
+# ── Statistical Tests ────────────────────────────────────────
+tests:
+  significance_level: 0.05
+  adf_max_lags: 20
+  granger_max_lags: 12
+  johansen_det_order: 0    # -1=no deterministic, 0=constant
+  johansen_k_ar_diff: 1
+
+# ── Paths ─────────────────────────────────────────────────────
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  results_figures: "results/figures"
+  results_tables: "results/tables"
