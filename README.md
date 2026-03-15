@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌦️ Commodity Price & Weather Impact Analysis — Improved Edition
 
 > **An improved and extended version of:**
@@ -182,3 +183,6 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 
 <p align="center">Built with 🐍 Python · 📊 statsmodels · 🤖 scikit-learn · ⚡ TensorFlow · 📈 Plotly</p>
 <p align="center"><strong>WorldQuant University Capstone Project (Improved)</strong></p>
+=======
+impoved Capstone Analysis 
+>>>>>>> 46459fc (improved Capstone Analysis)
